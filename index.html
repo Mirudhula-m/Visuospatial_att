@@ -1,0 +1,183 @@
+<!--
+JATOS online experiment.
+Generic index.html
+
+-->
+
+<!DOCTYPE html>
+
+<html>
+
+<head> <!--Contains metadata information about the document-->
+	
+	<meta charset = "UTF-8">
+	<title>Visuospatial Attention</title> <!--specifies title for the document-->
+	
+	<!--STYLE OF THE WEBPAGE-->
+	<link href = "css/jspsych.css" rel="stylesheet" type="text/css"></link>
+
+
+	<!--canvas id = "canvas1"></canvas>
+	<canvas id = "backCanvas1"></canvas-->
+
+	<!--jQUERY-->
+	<script src = "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+	<!--FILES FOR IMPORTING TRIAL DATA-->
+	<input type = "file" id = "file-input"/>
+	
+	<!--jsPSYCH-->
+	<script src = "js/jspsych.js"></script>
+
+	<!--SNAP SVG-->
+	<script src = "snap_svg/snap.svg-min.js"></script>
+
+	<!-- PLUGINS-->
+	<script src = "js/plugins/static/jspsych-html-keyboard-response.js"></script>
+	<script src = "js/plugins/static/jspsych-image-keyboard-response.js"></script>
+	<script src = "js/plugins/static/jspsych-fullscreen.js"></script>
+	<script src = "js/plugins/static/jspsych-resize.js"></script>
+	<script src = "js/plugins/static/jspsych-call-function.js"></script>
+	<script src = "js/plugins/static/jspsych-html-button-response.js"></script>
+	
+	<script src = "js/plugins/static/jspsych-poldrack-single-stim.js"></script>
+
+	<script src = "js/plugins/custom/jspsych-call-function-stimDisplay.js"></script>
+
+	<!--PSYCHOPHYSICS PLUGIN-->
+	<script src = "js/plugins/psychophysics/jspsych-psychophysics.js"></script>
+
+	<!--EYE TRACKING-->
+	<script src = "js/eyeTracking/gazerecorder.js"></script>
+	<script src = "js/eyeTracking/eyeTrack.js"></script>
+	<script src = "js/eyeTracking/eyeTrackScreens.js"></script>
+	<script src = "js/eyeTracking/validationScreens.js"></script>
+	<script src = "js/eyeTracking/recalibrationScreens.js"></script>
+	<script src = "js/eyeTracking/validationScreens.js"></script>
+	<script src = "js/eyeTracking/validationScreens.js"></script>
+	<script src = "js/eyeTracking/do_recal.js"></script>
+
+	<!--TASK DATA-->
+	<script src = "js/taskVariables.js"></script>
+
+	<!--HELPER FUNCTIONS-->
+	<script src = "js/helpers/makeCanvas.js"></script>
+	<script src = "js/helpers/generateRandNormal.js"></script>
+	<script src = "js/helpers/circleParameters.js"></script>
+	<script src = "js/helpers/fixationCross.js"></script>
+	<script src = "js/helpers/calculateFinalAngles.js"></script>
+	<script src = "js/helpers/grating.js"></script>
+	<script src = "js/helpers/presentationScreens.js"></script>
+	<script src = "js/helpers/storingData.js"></script>
+	<script src = "js/helpers/initialMessages.js"></script>
+	<script src = "js/helpers/instruction.js"></script>
+	<script src = "js/helpers/blockMessages.js"></script>
+	<script src = "js/helpers/staircase.js"></script>
+	<script src = "js/helpers/trialRejection.js"></script>
+	<script src = "js/helpers/dva2pixel.js"></script>
+	<script src = "js/helpers/stimVariables.js"></script>
+	<script src = "js/helpers/drawCues.js"></script>
+
+	
+	
+	<!--TIMELINE GENERATION-->
+	<script src = "js/index.js"></script>
+
+	<!--JATOS-->
+	<script src = "/assets/javascripts/jatos.js"></script>
+
+</head>
+
+<body> <!--contains the visible page content-->
+
+	<svg id = "svg" style = "position:absolute"></svg>
+
+</body>
+
+
+<script>
+
+	//--------------------------------------------
+	// setting background colour to gray.      
+	//--------------------------------------------
+	window.addEventListener("load",function() 
+	{ 
+		document.body.style.background = '#808080';
+	});
+
+	//--------------------------------------------
+	// JATOS code component
+	//--------------------------------------------
+//	jatos.onLoad(function()
+//	{
+		timeline = timeline.concat(createTimeline());
+		//--------------------------------------------
+		// jsPsych code component
+		//--------------------------------------------
+
+		// start experiment
+		jsPsych.init(
+		{	
+			timeline: timeline, 
+
+/*			on_trial_finish: function(data)
+			{
+				if(data.is_trialData)
+				{
+					trialData = JSON.stringify({subjectNum: data.subjectNum, blockNum: data.blockNum, trialNum:data.trialNum, WM_cue: data.WM_cue, initialAngles: data.initialAngles, finalAngles: data.finalAngles, delayDurationFixation: data.delayDurationFixation, delayDuration: data.delayDuration, changeState: data.changeState, changeDirection: data.changeDirection, WM_Probe: data.WM_Probe, Response_AFC: data.Response_AFC, RT_AFC: data.RT_AFC, is_trialReject: data.is_trialReject}); 
+
+					all_trialData.push(trialData);
+					all_blockData.push(trialData);
+					
+					if(data.Response_AFC == -1)
+						{ response = -1; }
+					else if(data.changeState[data.WM_Probe-1] == data.Response_AFC)
+						{ response = 1; }
+					else if(data.changeState[data.WM_Probe-1] != data.Response_AFC)
+						{ response = 0; }
+					else
+						{ response = 99; } // error
+
+					jatos.appendResultData(data.WM_cue+" "+data.WM_Probe+" "+response+", ");
+				
+					if(data.trialNum == n_Trials)
+					{
+						jatos.uploadResultFile(all_trialData, data.subjectNum+"_block"+data.blockNum+".txt");
+						all_trialData = [];
+						jatos.uploadResultFile(changeAngleData, subjectNum+"_staircaseData.txt");
+					}
+				}
+
+				if(data.is_staircaseData)
+				{
+					changeAngleData_json =  JSON.stringify({changeAngle: data.oldChangeAngle, meanCorrect: data.meanCorrect});
+					changeAngleData.push(changeAngleData_json);
+				}
+
+			},
+			on_close: function(data) 
+			{
+	    		jatos.uploadResultFile(all_blockData, subjectNum+"_allTrials.txt");
+	    		jatos.uploadResultFile(changeAngleData, subjectNum+"_staircaseData.txt");
+	    		eyeTrackingData = JSON.stringify({gazeX: gazeX, gazeY: gazeY, headX: headX, headY: headY, headZ: headZ, headYaw: headYaw, headRoll: headRoll, headPitch: headPitch});
+	    		jatos.uploadResultFile(eyeTrackingData, subjectNum+"_eyeTrackingData.txt");
+	    		jatos.uploadResultFile(all_trial_latency, subjectNum+"_latencyData.txt");
+	    		
+			},
+			on_finish: function(data)
+			{
+				jsPsych.data.displayData();
+			}
+*/		});
+
+		window.onbeforeunload = (function(msg) 
+		{
+			var msg = "It is important to do this experiment all at once. "
+					+ "Are you sure you want to close this window?";
+			return msg;
+		});
+//	})
+
+</script>
+
+</html>

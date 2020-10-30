@@ -1,0 +1,77 @@
+<!--
+JATOS online experiment.
+Generic index.html
+
+-->
+
+<!DOCTYPE html>
+
+<html>
+
+<head> <!--Contains metadata information about the document-->
+	
+	<meta charset = "UTF-8">
+	<title>Visuospatial Attention</title> <!--specifies title for the document-->
+	
+	<!--STYLE OF THE WEBPAGE-->
+	<link href = "css/jspsych.css" rel="stylesheet" type="text/css"></link>
+
+	<canvas id = "html5Canvas"></canvas>
+
+	<canvas id = canvas2></canvas>
+	<canvas id = canvas1></canvas>
+	<canvas id = backCanvas1></canvas>
+	<canvas id = backCanvas2></canvas>
+
+	<!--FILES FOR IMPORTING TRIAL DATA-->
+	
+	<!--jsPSYCH-->
+	<script src = "js/jspsych.js"></script>
+
+	<!--SNAP SVG-->
+	<script src = "snap_svg/snap.svg-min.js"></script>
+
+	<!-- PLUGINS-->
+	<script src = "js/plugins/static/jspsych-html-keyboard-response.js"></script>
+	<script src = "js/plugins/static/jspsych-image-keyboard-response.js"></script>
+	<script src = "js/plugins/static/jspsych-fullscreen.js"></script>
+	<script src = "js/plugins/static/jspsych-resize.js"></script>
+	<script src = "js/plugins/static/jspsych-call-function.js"></script>
+	<script src = "js/plugins/static/jspsych-html-button-response.js"></script>
+
+	<script src = "js/plugins/static/jspsych-poldrack-single-stim.js"></script>
+
+<!--script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script-->
+<script src = "js/plugins/static/jquery.min.js"></script>
+
+
+	<script src = "js/helpers/grating.js"></script>
+	
+
+	<!--JATOS-->
+
+</head>
+
+<body> <!--contains the visible page content-->
+
+
+
+	
+
+</body>
+
+<script>
+
+	//--------------------------------------------
+	// setting background colour to gray.      
+	//--------------------------------------------
+	window.addEventListener("load",function() 
+	{ 
+		document.body.style.background = '#808080';
+	});
+
+
+
+</script>
+
+</html>
