@@ -249,10 +249,10 @@ function delayScreen(duration)
 		{
 			console.log('s5 just finished loading.');
 
-			setTimeout(function(){ makeStimGrating2('canvas1', 'backCanvas1', -1, -1, gratingAngles[0], gratingContrast[0], gratingPosition[0])}, duration);
-  		    setTimeout(function(){ makeStimGrating2('canvas2', 'backCanvas2', 1, -1, gratingAngles[1], gratingContrast[1], gratingPosition[1])}, duration);
-  		    setTimeout(function(){ makeStimGrating2('canvas3', 'backCanvas3', -1, 1, gratingAngles[2], gratingContrast[2], gratingPosition[2])}, duration);
-  		    setTimeout(function(){ makeStimGrating2('canvas4', 'backCanvas4', 1, 1, gratingAngles[3], gratingContrast[3], gratingPosition[3])}, duration);
+	//		setTimeout(function(){ makeStimGrating2('canvas1', 'backCanvas1', -1, -1, gratingAngles[0], gratingContrast[0], gratingPosition[0])}, duration);
+  	//	    setTimeout(function(){ makeStimGrating2('canvas2', 'backCanvas2', 1, -1, gratingAngles[1], gratingContrast[1], gratingPosition[1])}, duration);
+  	//	    setTimeout(function(){ makeStimGrating2('canvas3', 'backCanvas3', -1, 1, gratingAngles[2], gratingContrast[2], gratingPosition[2])}, duration);
+  	//	    setTimeout(function(){ makeStimGrating2('canvas4', 'backCanvas4', 1, 1, gratingAngles[3], gratingContrast[3], gratingPosition[3])}, duration);
   		},
   		on_finish: function(data)
   		{
@@ -299,10 +299,10 @@ function gratingSet2(duration, gratingAngles, gratingContrast, gratingPosition)
 			a = (new Date()).getTime();
   		    console.log('s6 just finished loading.');
 
-  	//	    makeStimGrating2('canvas1', 'backCanvas1', -1, -1, gratingAngles[0], gratingContrast[0], gratingPosition[0]);
-  	//	    makeStimGrating2('canvas2', 'backCanvas2', 1, -1, gratingAngles[1], gratingContrast[1], gratingPosition[1]);
-  	//	    makeStimGrating2('canvas3', 'backCanvas3', -1, 1, gratingAngles[2], gratingContrast[2], gratingPosition[2]);
-  	//	    makeStimGrating2('canvas4', 'backCanvas4', 1, 1, gratingAngles[3], gratingContrast[3], gratingPosition[3]);
+  		    makeStimGrating2('canvas1', 'backCanvas1', -1, -1, gratingAngles[0], gratingContrast[0], gratingPosition[0]);
+  		    makeStimGrating2('canvas2', 'backCanvas2', 1, -1, gratingAngles[1], gratingContrast[1], gratingPosition[1]);
+  		    makeStimGrating2('canvas3', 'backCanvas3', -1, 1, gratingAngles[2], gratingContrast[2], gratingPosition[2]);
+  		    makeStimGrating2('canvas4', 'backCanvas4', 1, 1, gratingAngles[3], gratingContrast[3], gratingPosition[3]);
   		},
 	  	on_finish: function(data)
   		{
