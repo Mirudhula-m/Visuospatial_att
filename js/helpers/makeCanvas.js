@@ -20,7 +20,9 @@ function Canvas(id, back_id, height, width, positionX, positionY)
 //	this.width = screen.width; // width of screen
 	this.canvas.height = height;
 	this.canvas.width = width;
+
 	this.canvas.style.top = positionY;
 	this.canvas.style.left = positionX;
+	
 	this.canvas.style.position = "absolute";
 }

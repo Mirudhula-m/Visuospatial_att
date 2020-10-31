@@ -8,7 +8,7 @@
 // FIXATION DOT
 //--------------------------------------
 
-function fixationScreen(duration, curr_totalTrialNum)
+function fixationScreen(duration, gratingAngles, gratingContrast, gratingPosition, curr_totalTrialNum)
 {
 
 	var psychBlock_NR =
@@ -25,7 +25,16 @@ function fixationScreen(duration, curr_totalTrialNum)
 			fixationCross_svg();
 			stim_str = s.toString();
 			s.clear();
-			return stim_str;
+			// canvases for generating gratings in advance. 
+			// All canvases are hidden and only fixation cross will be shown
+			// This reduced the latency by 75-100ms
+			return '<div>'+
+					'<canvas id = "canvas0" style = "display:none"></canvas><canvas id = "backCanvas0" style = "display:none"></canvas>'+
+					'<canvas id = "canvas1" style = "display:none"></canvas><canvas id = "backCanvas1" style = "display:none"></canvas>'+
+					'<canvas id = "canvas2" style = "display:none"></canvas><canvas id = "backCanvas2" style = "display:none"></canvas>'+
+					'<canvas id = "canvas3" style = "display:none"></canvas><canvas id = "backCanvas3" style = "display:none"></canvas>'+
+					'<canvas id = "canvas4" style = "display:none"></canvas><canvas id = "backCanvas4" style = "display:none"></canvas>'+
+					'</div>'+stim_str;
 			
 		},
 		on_load: function() 
@@ -33,9 +42,16 @@ function fixationScreen(duration, curr_totalTrialNum)
 			console.log("---------------------------------------------------");
 			console.log("START OF NEW TRIAL "+curr_totalTrialNum+" ---------");
 			console.log("---------------------------------------------------");
+			
+			// Generating gratings in advance
 
-			// start making grating for the next screen
-			//setTimeout(function(){ makeStimGrating1('canvas1', 'backCanvas1', 90, 1)}, duration); 
+			makeStimGrating1URL('canvas0', 'backCanvas0', 90, 1);
+
+			makeStimGrating2URL('canvas1', 'backCanvas1', -1, -1, gratingAngles[0], gratingContrast[0], gratingPosition[0], 0);
+  		    makeStimGrating2URL('canvas2', 'backCanvas2', 1, -1, gratingAngles[1], gratingContrast[1], gratingPosition[1], 1);
+  		    makeStimGrating2URL('canvas3', 'backCanvas3', -1, 1, gratingAngles[2], gratingContrast[2], gratingPosition[2], 2);
+  		    makeStimGrating2URL('canvas4', 'backCanvas4', 1, 1, gratingAngles[3], gratingContrast[3], gratingPosition[3], 3);
+
   		},
   		on_finish: function(data)
   		{
@@ -72,16 +88,14 @@ function gratingSet1(duration)
 			a = (new Date()).getTime();
   		    console.log('s2 just finished loading.');
 
-  		    // start making grating for the next screen
-			//setTimeout(function(){ makeStimGrating1('canvas1', 'backCanvas1', 90, 1)}, duration); 
-			makeStimGrating1('canvas1', 'backCanvas1', 90, 1); 
+ 			makeStimGrating1('canvas1', 'backCanvas1'); 
+ 			console.log("111 = "+((new Date()).getTime() - a));
   		},
 	  	on_finish: function(data)
   		{
   			lat = (new Date()).getTime() - a;
   			console.log("s2 = "+lat);
   			trial_latency.s2 = lat - duration;
-
   		}
 	}
 	return psychBlock_NR;
@@ -116,8 +130,6 @@ function whiteCues(duration, cue_pos1, cue_pos2)
 			drawCues(cue_pos1, 'white', 'cue1');
 			drawCues(cue_pos2, 'white', "cue2");
 
-  		    // start making grating for the next screen
-			//setTimeout(function(){ makeStimGrating1('canvas1', 'backCanvas1', 90, 1)}, duration); 
   			makeStimGrating1('canvas1', 'backCanvas1', 90, 1); 
   		},
 	  	on_finish: function(data)
@@ -149,7 +161,7 @@ function colorCues(duration, cue_pos1, cue_pos2, cueColor1, cueColor2)
 			stim_str = s.toString();
 			s.clear();
 	
-			return '<div><canvas id = "cue1"></canvas><canvas id = "cue2"></canvas><canvas id = "canvas1"></canvas><canvas id = "backCanvas1"></canvas></div>'+stim_str;
+			return '<div><canvas id = "cue1"></canvas><canvas id = "cue2"></canvas><canvas id = "canvas5"></canvas><canvas id = "backCanvas5"></canvas></div>'+stim_str;
 		},
 		on_load: function() 
 		{
@@ -159,10 +171,7 @@ function colorCues(duration, cue_pos1, cue_pos2, cueColor1, cueColor2)
   		    drawCues(cue_pos1, cueColor1, 'cue1');
 			drawCues(cue_pos2, cueColor2, 'cue2');
 
-  		    // start making grating for the next screen
-	//		setTimeout(function(){ makeStimGrating1('canvas1', 'backCanvas1', 90, 1)}, duration);
-
-			makeStimGrating1('canvas1', 'backCanvas1', 90, 1); 
+			makeStimGrating1('canvas5', 'backCanvas5'); 
   		},
 	  	on_finish: function(data)
   		{
@@ -175,59 +184,12 @@ function colorCues(duration, cue_pos1, cue_pos2, cueColor1, cueColor2)
 	return psychBlock_NR;
 }
 
-//--------------------------------------
-// INTRODUCING ALL SCREENS RELATED TO GRATING 1
-//--------------------------------------
-
-// This function is written in order to avoid the weird flashes that is occuring due to latency...
-// ...when the screens are introduced as separate gratings.
-// Here, the grating is first displayed and then the cues are timed using window.setTimeout
-// But, this is not working as I expected it to..
-
-function all_gratingSet1(duration, cue_pos1, cue_pos2, cueColor1, cueColor2)
-{
-	var psychBlock_NR =
-	{
-		type:"html-keyboard-response",
-		trial_duration: 3000,
-		choices: jsPsych.NO_KEYS,
-		stimulus: function()
-		{
-			fixationCross_svg();
-			stim_str = s.toString();
-			s.clear();
-	
-			return '<div><canvas id = "cue1"></canvas><canvas id = "cue2"></canvas><canvas id = "canvas1"></canvas><canvas id = "backCanvas1"></canvas></div>'+stim_str;
-		},
-		on_load: function() 
-		{
-			a = (new Date()).getTime();
-  		    console.log('sall1 just finished loading.');
-
-  		    window.setTimeout(function(){ drawCues(cue_pos1, "white", 'cue1')}, 1000); 
-  		    window.setTimeout(function(){ drawCues(cue_pos2, "white", 'cue2')}, 1000);
-
-  		    window.setTimeout(function(){ drawCues(cue_pos1, cueColor1, 'cue1')}, 2000); 
-  		    window.setTimeout(function(){ drawCues(cue_pos2, cueColor2, 'cue2')}, 2000);
-
-  		    makeStimGrating1('canvas1', 'backCanvas1', 90, 1);
-  		},
-	  	on_finish: function(data)
-  		{
-  			lat = (new Date()).getTime() - a;
-  			console.log("sall1 = "+lat);
-  			trial_latency.s2 = lat - duration;
-
-  		}
-	}
-	return psychBlock_NR;
-}
 
 //--------------------------------------
 // DELAY SCREEN
 //--------------------------------------
 
-function delayScreen(duration)
+function delayScreen(duration, gratingPosition)
 {
 
 	var psychBlock_NR =
@@ -249,17 +211,23 @@ function delayScreen(duration)
 		{
 			console.log('s5 just finished loading.');
 
-	//		setTimeout(function(){ makeStimGrating2('canvas1', 'backCanvas1', -1, -1, gratingAngles[0], gratingContrast[0], gratingPosition[0])}, duration);
-  	//	    setTimeout(function(){ makeStimGrating2('canvas2', 'backCanvas2', 1, -1, gratingAngles[1], gratingContrast[1], gratingPosition[1])}, duration);
-  	//	    setTimeout(function(){ makeStimGrating2('canvas3', 'backCanvas3', -1, 1, gratingAngles[2], gratingContrast[2], gratingPosition[2])}, duration);
-  	//	    setTimeout(function(){ makeStimGrating2('canvas4', 'backCanvas4', 1, 1, gratingAngles[3], gratingContrast[3], gratingPosition[3])}, duration);
+			// calling functions to render the gratings ahead of the next screen.			
+			// Basically trying to render the gratings during the delay period, so that it takes ...
+			// ...less time to render 
+			// This reduced the latency by 25-30 ms
+			setTimeout(function(){
+	  		    makeStimGrating2('canvas1', 'backCanvas1', -1, -1, gratingPosition[0], 0);
+	  		    makeStimGrating2('canvas2', 'backCanvas2', 1, -1, gratingPosition[1], 1);
+	  		    makeStimGrating2('canvas3', 'backCanvas3', -1, 1, gratingPosition[2], 2);
+	  		    makeStimGrating2('canvas4', 'backCanvas4', 1, 1, gratingPosition[3], 3);
+			}, (duration));
+
   		},
   		on_finish: function(data)
   		{
   			lat = (new Date()).getTime() - a;
   			console.log("s5 = "+lat);
   			trial_latency.s1 = lat - duration;
-
   		}
 	}
 	return psychBlock_NR;
@@ -269,17 +237,16 @@ function delayScreen(duration)
 // STIMULUS 2 PRESENTATION
 //--------------------------------------
 
-function gratingSet2(duration, gratingAngles, gratingContrast, gratingPosition)
+function gratingSet2(duration)
 {
-	/* position 1 = away from the center
-	   position 2 = center of the placeholder
-	   position 3 = towards the center
+	/* grating position 1 = away from the center
+	   grating position 2 = center of the placeholder
+	   grating position 3 = towards the center
 	*/
-
 	var psychBlock_NR =
 	{
 		type:"html-keyboard-response",
-		trial_duration: 300,
+		trial_duration: duration,
 		choices: jsPsych.NO_KEYS,
 		stimulus: function()
 		{
@@ -287,29 +254,24 @@ function gratingSet2(duration, gratingAngles, gratingContrast, gratingPosition)
 			stim_str = s.toString();
 			s.clear();
 			
-			return '<div>'+
+			return stim_str+'<div style = "position:absolute; top: 0px; left: 0px">'+
 					'<canvas id = "canvas1"></canvas><canvas id = "backCanvas1"></canvas>'+
 					'<canvas id = "canvas2"></canvas><canvas id = "backCanvas2"></canvas>'+
 					'<canvas id = "canvas3"></canvas><canvas id = "backCanvas3"></canvas>'+
-					'<canvas id = "canvas4"></canvas><canvas id = "backCanvas4"></canvas>'+
-					'</div>'+stim_str;
+					'<canvas id = "canvas4"></canvas><canvas id = "backCanvas4"></canvas>';
 		},
 		on_load: function() 
 		{
 			a = (new Date()).getTime();
   		    console.log('s6 just finished loading.');
 
-  		    makeStimGrating2('canvas1', 'backCanvas1', -1, -1, gratingAngles[0], gratingContrast[0], gratingPosition[0]);
-  		    makeStimGrating2('canvas2', 'backCanvas2', 1, -1, gratingAngles[1], gratingContrast[1], gratingPosition[1]);
-  		    makeStimGrating2('canvas3', 'backCanvas3', -1, 1, gratingAngles[2], gratingContrast[2], gratingPosition[2]);
-  		    makeStimGrating2('canvas4', 'backCanvas4', 1, 1, gratingAngles[3], gratingContrast[3], gratingPosition[3]);
+  		    console.log("111 = "+((new Date()).getTime() - a));
   		},
 	  	on_finish: function(data)
   		{
   			lat = (new Date()).getTime() - a;
   			console.log("s6 = "+lat);
   			trial_latency.s2 = lat - duration;
-
   		}
 	}
 	return psychBlock_NR;
@@ -319,7 +281,7 @@ function gratingSet2(duration, gratingAngles, gratingContrast, gratingPosition)
 // RESPONSE BLOCK
 //--------------------------------------
 
-function ResponseBlock(duration, probe_pos, curr_totalTrialNum)
+function response1(duration, probe_pos, curr_totalTrialNum)
 {
 	var psychBlock_R =
 	{
@@ -330,19 +292,19 @@ function ResponseBlock(duration, probe_pos, curr_totalTrialNum)
 		{
 			a = (new Date()).getTime();
 
-			fixationDot(probe_pos);
-			_4bars(finalAngleData[curr_totalTrialNum]);
-			cue_flag = 0;
-			_4arcs(cue_flag);
+			fixationCross_svg();
 			stim_str = s.toString();
 			s.clear();
+
 			return stim_str;
 		},
-/*		on_load: function() 
+		on_load: function() 
 		{
-  		    console.log('RB just finished loading.');
+  		    console.log('RB1 just finished loading.');
+
+
   		},
-*/ 		on_finish: function(data)
+ 		on_finish: function(data)
   		{
   			// recording subject data
 			sub_response = [90, 77].indexOf(data.key_press); // 0 for no change and 1 for change

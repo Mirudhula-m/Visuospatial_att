@@ -139,33 +139,16 @@ function applyMask(arr, mask) {
 // STIMULUS 1 - First GRATING SET
 //**************************************
 //--------------------------------------
+var url;
 
-function makeStimGrating1(canvas, backcanvas, angle, contrast) 
+function makeStimGrating1URL(canvas, backcanvas, angle, contrast) 
 {
 	// this function makes 4 gratings
 	var jgl_canvas = new Canvas(canvas, backcanvas, win_y, win_x, 0, 0);
 
-	// Only continue if WebGL is available and working
-  if (jgl_canvas.context === null) {
-    alert("Unable to initialize WebGL. Your browser or machine may not support it.");
-    return;
-  }
-
-
 	var arr = jglMakeGrating(placeholderDia, placeholderDia, 0.75, angle, 0, 0);
 	var mask = make2dMask(arr, 5, 100);
 	var drawing = jglCreateTexture(jgl_canvas, arr, mask, contrast);
-
-	jgl_canvas.context.beginPath();
-	jgl_canvas.context.arc(win_x/2-(placeholderDist*Math.cos(45*Math.PI/180)), win_y/2-(placeholderDist*Math.sin(45*Math.PI/180)), placeholderDia/2, 0, 2 * Math.PI);
-	jgl_canvas.context.closePath();
-	jgl_canvas.context.arc(win_x/2+(placeholderDist*Math.cos(45*Math.PI/180)), win_y/2-(placeholderDist*Math.sin(45*Math.PI/180)), placeholderDia/2, 0, 2 * Math.PI);
-	jgl_canvas.context.closePath();
-	jgl_canvas.context.arc(win_x/2-(placeholderDist*Math.cos(45*Math.PI/180)), win_y/2+(placeholderDist*Math.sin(45*Math.PI/180)), placeholderDia/2, 0, 2 * Math.PI);
-	jgl_canvas.context.closePath();
-	jgl_canvas.context.arc(win_x/2+(placeholderDist*Math.cos(45*Math.PI/180)), win_y/2+(placeholderDist*Math.sin(45*Math.PI/180)), placeholderDia/2, 0, 2 * Math.PI);
-	jgl_canvas.context.closePath();
-	jgl_canvas.context.clip();
 
 	var tempCanvas = document.createElement("canvas");
 	var tempctx = tempCanvas.getContext("2d");
@@ -177,6 +160,23 @@ function makeStimGrating1(canvas, backcanvas, angle, contrast)
 
 	tempctx.putImageData(drawing, 0, 0);
 	url = tempCanvas.toDataURL();
+}
+
+function makeStimGrating1(canvas, backcanvas) 
+{
+	// this function makes 4 gratings
+	var jgl_canvas = new Canvas(canvas, backcanvas, win_y, win_x, 0, 0);
+	
+	jgl_canvas.context.beginPath();
+	jgl_canvas.context.arc(win_x/2-(placeholderDist*Math.cos(45*Math.PI/180)), win_y/2-(placeholderDist*Math.sin(45*Math.PI/180)), placeholderDia/2, 0, 2 * Math.PI);
+	jgl_canvas.context.closePath();
+	jgl_canvas.context.arc(win_x/2+(placeholderDist*Math.cos(45*Math.PI/180)), win_y/2-(placeholderDist*Math.sin(45*Math.PI/180)), placeholderDia/2, 0, 2 * Math.PI);
+	jgl_canvas.context.closePath();
+	jgl_canvas.context.arc(win_x/2-(placeholderDist*Math.cos(45*Math.PI/180)), win_y/2+(placeholderDist*Math.sin(45*Math.PI/180)), placeholderDia/2, 0, 2 * Math.PI);
+	jgl_canvas.context.closePath();
+	jgl_canvas.context.arc(win_x/2+(placeholderDist*Math.cos(45*Math.PI/180)), win_y/2+(placeholderDist*Math.sin(45*Math.PI/180)), placeholderDia/2, 0, 2 * Math.PI);
+	jgl_canvas.context.closePath();
+	jgl_canvas.context.clip();
 
 	var img = new Image();
     img.onload = function()
@@ -188,15 +188,18 @@ function makeStimGrating1(canvas, backcanvas, angle, contrast)
         jgl_canvas.context.drawImage(img, win_x/2+(placeholderDist*Math.cos(45*Math.PI/180))-(placeholderDia/2), win_y/2+(placeholderDist*Math.sin(45*Math.PI/180))-(placeholderDia/2));
     }
     img.src = url;
+    
 }
 
-//--------------------------------------
-//**************************************
-// STIMULUS 1 - First GRATING SET
-//**************************************
-//--------------------------------------
 
-function makeStimGrating2(canvas, backcanvas, placeholderPositionX, placeholderPositionY, angle, contrast, gratingPosition) 
+//--------------------------------------
+//**************************************
+// STIMULUS 2 - Second GRATING SET
+//**************************************
+//--------------------------------------
+var url2 = [];
+
+function makeStimGrating2URL(canvas, backcanvas, placeholderPositionX, placeholderPositionY, angle, contrast, gratingPosition, placeholderPosition) 
 {
 	/* position 1 = away from the center
 	   position 2 = center of the placeholder
@@ -216,6 +219,36 @@ function makeStimGrating2(canvas, backcanvas, placeholderPositionX, placeholderP
 	var mask = make2dMask(arr, 5, 100);
 	var drawing = jglCreateTexture(jgl_canvas, arr, mask, contrast);
 
+	var tempCanvas = document.createElement("canvas");
+	var tempctx = tempCanvas.getContext("2d");
+	tempCanvas.width = screen.width;
+    tempCanvas.height = screen.height;
+    tempCanvas.style.position = "absolute";
+    tempCanvas.style.top = "0px";
+    tempCanvas.style.left = "0px";
+
+	tempctx.putImageData(drawing, 0, 0);
+
+	url2[placeholderPosition-1] = tempCanvas.toDataURL();
+}
+
+function makeStimGrating2(canvas, backcanvas, placeholderPositionX, placeholderPositionY, gratingPosition, placeholderPosition) 
+{
+	/* position 1 = away from the center
+	   position 2 = center of the placeholder
+	   position 3 = towards the center
+	   All positions are the same distance away from fixation cross
+	*/
+
+	// this function makes 4 gratings
+	/*  1 - top left
+		2 - top right
+		3 - bottom left
+		4 - bottom right
+	*/
+	
+	var jgl_canvas = new Canvas(canvas, backcanvas, win_y, win_x, 0, 0);	
+
 	jgl_canvas.context.beginPath();
 
 	switch(gratingPosition)
@@ -234,16 +267,6 @@ function makeStimGrating2(canvas, backcanvas, placeholderPositionX, placeholderP
 	jgl_canvas.context.closePath();
 	jgl_canvas.context.clip();
 
-	var tempCanvas = document.createElement("canvas");
-	var tempctx = tempCanvas.getContext("2d");
-	tempCanvas.width = screen.width;
-    tempCanvas.height = screen.height;
-    tempCanvas.style.position = "absolute";
-    tempCanvas.style.top = "0px";
-    tempCanvas.style.left = "0px";
-
-	tempctx.putImageData(drawing, 0, 0);
-	url = tempCanvas.toDataURL();
 
 	var img = new Image();
     img.onload = function()
@@ -251,7 +274,7 @@ function makeStimGrating2(canvas, backcanvas, placeholderPositionX, placeholderP
         // drawImage the image on the canvas
         jgl_canvas.context.drawImage(img, win_x/2+(placeholderPositionX)*(placeholderDist*Math.cos(45*Math.PI/180))-(placeholderDia/2), win_y/2+(placeholderPositionY)*(placeholderDist*Math.sin(45*Math.PI/180))-(placeholderDia/2));
     }
-    img.src = url;
+    img.src = url2[placeholderPosition-1];
 }
 
 

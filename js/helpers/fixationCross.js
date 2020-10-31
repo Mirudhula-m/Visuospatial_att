@@ -25,7 +25,7 @@ function fixationCross_canvas(canvas)
 {
 	var cross_len = 18;
 
-	var c = new Canvas(canvas);
+	var c = new Canvas(canvas, "_", screen.height, screen.width);
 
 	c.context.moveTo(win_x/2, win_y/2 - cross_len/2);
 	c.context.lineTo(win_x/2, win_y/2 + cross_len/2);

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html>
+
+<head> <!--Contains metadata information about the document-->
+	
+	<meta charset = "UTF-8">
+	<title>Visuospatial Attention</title> <!--specifies title for the document-->
+	
+	<canvas id = 'canvas'></canvas>
+
+	<script src = "myworkerurl.js"></script>
+</head>
+
+<script>
+console.log("first");
+	const offscreen = document.querySelector('canvas').transferControlToOffscreen();
+	console.log("top");
+const worker = new Worker('myworkerurl.js');
+console.log("middle");
+worker.postMessage({ canvas: offscreen }, [offscreen]);
+console.log("over");
+
+</script>
+</html>
