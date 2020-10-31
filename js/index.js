@@ -62,9 +62,9 @@ function createTimeline()
 			exp_timeline.push(colorCues(colorCues_time, cue_pos1, cue_pos2, cueColor1, cueColor2));
 			exp_timeline.push(delayScreen(delay_time, gratingPosition));
 			exp_timeline.push(gratingSet2(gratingSet2_time));
-//			exp_timeline.push(response1(resp1_time, respPos1, respPos2, respColor1, respColor2);
-//			exp_timeline.push(response2(resp2_time, respPos1, respColor1);
-//			exp_timeline.push(response3(resp3_time, respPos2, respColor2);
+			exp_timeline.push(response1(resp1_time, respPos1, respPos2, respColor1, respColor2));
+			exp_timeline.push(response2(resp2_time, respPos1, respColor1));
+			exp_timeline.push(response3(resp3_time, respPos2, respColor2));
 
 
 		//	exp_timeline.push(all_gratingSet1(colorCues_time, cue_pos1, cue_pos2, cueColor1, cueColor2));

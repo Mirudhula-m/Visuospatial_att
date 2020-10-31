@@ -278,10 +278,10 @@ function gratingSet2(duration)
 }
 
 //--------------------------------------
-// RESPONSE BLOCK
+// RESPONSE BLOCKS
 //--------------------------------------
 
-function response1(duration, probe_pos, curr_totalTrialNum)
+function response1(duration, pos1, pos2, color1, color2, curr_totalTrialNum)
 {
 	var psychBlock_R =
 	{
@@ -296,23 +296,110 @@ function response1(duration, probe_pos, curr_totalTrialNum)
 			stim_str = s.toString();
 			s.clear();
 
-			return stim_str;
+			return stim_str+'<div style = "position:absolute; top: 0px; left: 0px">'+
+					'<canvas id = "canvas"></canvas></div>';
 		},
 		on_load: function() 
 		{
   		    console.log('RB1 just finished loading.');
 
-
+  		    makerespCircles("canvas", pos1, color1, pos2, color2);
   		},
  		on_finish: function(data)
   		{
   			// recording subject data
-			sub_response = [90, 77].indexOf(data.key_press); // 0 for no change and 1 for change
-  			if(data.rt == null) { sub_RT = data.rt; }
-  			else { sub_RT = (data.rt).toFixed(2); }
+//			sub_response = [90, 77].indexOf(data.key_press); // 0 for no change and 1 for change
+  //			if(data.rt == null) { sub_RT = data.rt; }
+  	//		else { sub_RT = (data.rt).toFixed(2); }
 
-  			response_AFC_data[curr_totalTrialNum] = sub_response;
-  			rt_AFC_data[curr_totalTrialNum] = sub_RT;
+  	//		response_AFC_data[curr_totalTrialNum] = sub_response;
+  	//		rt_AFC_data[curr_totalTrialNum] = sub_RT;
+
+  			lat = (new Date()).getTime() - a;
+  			console.log("s8 = "+lat);
+  			trial_latency.s8 = lat - duration;
+  		}
+	}
+	return psychBlock_R;
+}
+
+function response2(duration, pos, color, curr_totalTrialNum)
+{
+	var psychBlock_R =
+	{
+		type:"html-keyboard-response",
+		trial_duration: duration+500,
+		choices: [90, 77], // z (no change) - 90; m (change) - 77
+		stimulus: function(data)
+		{
+			a = (new Date()).getTime();
+
+			fixationCross_svg();
+			stim_str = s.toString();
+			s.clear();
+
+			return stim_str+'<div style = "position:absolute; top: 0px; left: 0px">'+
+					'<canvas id = "canvas"></canvas></div>';
+		},
+		on_load: function() 
+		{
+  		    console.log('RB1 just finished loading.');
+
+  		    makerespCircles("canvas");
+  		    setTimeout(function(){makerespCircles("canvas", pos, color)}, 500);
+  		},
+ 		on_finish: function(data)
+  		{
+  			// recording subject data
+//			sub_response = [90, 77].indexOf(data.key_press); // 0 for no change and 1 for change
+  //			if(data.rt == null) { sub_RT = data.rt; }
+  	//		else { sub_RT = (data.rt).toFixed(2); }
+
+  	//		response_AFC_data[curr_totalTrialNum] = sub_response;
+  	//		rt_AFC_data[curr_totalTrialNum] = sub_RT;
+
+  			lat = (new Date()).getTime() - a;
+  			console.log("s8 = "+lat);
+  			trial_latency.s8 = lat - duration;
+  		}
+	}
+	return psychBlock_R;
+}
+
+function response3(duration, pos, color, curr_totalTrialNum)
+{
+	var psychBlock_R =
+	{
+		type:"html-keyboard-response",
+		trial_duration: duration+500,
+		choices: [90, 77], // z (no change) - 90; m (change) - 77
+		stimulus: function(data)
+		{
+			a = (new Date()).getTime();
+
+			fixationCross_svg();
+			stim_str = s.toString();
+			s.clear();
+
+			return stim_str+'<div style = "position:absolute; top: 0px; left: 0px">'+
+					'<canvas id = "canvas"></canvas></div>';
+		},
+		on_load: function() 
+		{
+  		    console.log('RB1 just finished loading.');
+
+  		    makerespCircles("canvas");
+  		    setTimeout(function(){makerespCircles("canvas", pos, color)}, 500);
+  		},
+ 		on_finish: function(data)
+  		{
+  			// recording subject data
+//			sub_response = [90, 77].indexOf(data.key_press); // 0 for no change and 1 for change
+  //			if(data.rt == null) { sub_RT = data.rt; }
+  	//		else { sub_RT = (data.rt).toFixed(2); }
+
+  	//		response_AFC_data[curr_totalTrialNum] = sub_response;
+  	//		rt_AFC_data[curr_totalTrialNum] = sub_RT;
 
   			lat = (new Date()).getTime() - a;
   			console.log("s8 = "+lat);
